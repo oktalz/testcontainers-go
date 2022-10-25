@@ -9,6 +9,7 @@ import (
 
 	"github.com/docker/docker/api/types"
 	"github.com/docker/docker/api/types/container"
+	"github.com/docker/docker/api/types/network"
 	"github.com/docker/docker/pkg/archive"
 	"github.com/docker/go-connections/nat"
 
@@ -123,6 +124,7 @@ type ContainerRequest struct {
 	ShmSize         int64    // Amount of memory shared with the host (in bytes)
 	CapAdd          []string // Add Linux capabilities
 	CapDrop         []string // Drop Linux capabilities
+	IPAMConfig      *network.EndpointIPAMConfig
 }
 
 type (
