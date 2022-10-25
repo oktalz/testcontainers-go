@@ -272,7 +272,6 @@ func (c *DockerContainer) inspectContainer(ctx context.Context) (*types.Containe
 // Logs will fetch both STDOUT and STDERR from the current container. Returns a
 // ReadCloser and leaves it up to the caller to extract what it wants.
 func (c *DockerContainer) Logs(ctx context.Context) (io.ReadCloser, error) {
-
 	const streamHeaderSize = 8
 
 	options := types.ContainerLogsOptions{
@@ -803,7 +802,7 @@ func NewDockerProvider(provOpts ...DockerProviderOption) (*DockerProvider, error
 }
 
 func (p *DockerProvider) logDockerServerInfo() {
-	infoMessage := `%v - Connected to docker: 
+	infoMessage := `%v - Connected to docker:
   Server Version: %v
   API Version: %v
   Operating System: %v
@@ -1025,7 +1024,7 @@ func (p *DockerProvider) CreateContainer(ctx context.Context, req ContainerReque
 		if err != nil {
 			return nil, err
 		}
-		for p, _ := range image.ContainerConfig.ExposedPorts {
+		for p := range image.ContainerConfig.ExposedPorts {
 			exposedPorts = append(exposedPorts, string(p))
 		}
 	}
@@ -1077,8 +1076,9 @@ func (p *DockerProvider) CreateContainer(ctx context.Context, req ContainerReque
 		})
 		if err == nil {
 			endpointSetting := network.EndpointSettings{
-				Aliases:   req.NetworkAliases[attachContainerTo],
-				NetworkID: nw.ID,
+				Aliases:    req.NetworkAliases[attachContainerTo],
+				NetworkID:  nw.ID,
+				IPAMConfig: req.IPAMConfig,
 			}
 			endpointConfigs[attachContainerTo] = &endpointSetting
 		}
@@ -1190,7 +1190,6 @@ func (p *DockerProvider) ReuseOrCreateContainer(ctx context.Context, req Contain
 		isRunning:         c.State == "running",
 	}
 	return dc, nil
-
 }
 
 // attemptToPullImage tries to pull the image while respecting the ctx cancellations.
