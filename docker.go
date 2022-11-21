@@ -576,7 +576,7 @@ func (c *DockerContainer) StartLogProducer(ctx context.Context) error {
 			Since:      since,
 		}
 
-		ctx, cancel := context.WithTimeout(ctx, time.Second*5)
+		ctx, cancel := context.WithTimeout(ctx, time.Minute*15)
 		defer cancel()
 
 		r, err := c.provider.client.ContainerLogs(ctx, c.GetContainerID(), options)
